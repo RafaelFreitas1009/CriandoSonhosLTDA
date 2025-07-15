@@ -51,7 +51,7 @@ Pressione enter e irá aparecer o terminal dentro da IDE rodando o software
 
 **Front-end** Python (terminal)
 
-## Banco de Dados
+## Banco de Dados (Desafio EXTRA)
 
 O sistema agora conta com um banco de dados local SQLite (`pizzamais.db`) que armazena os pedidos realizados, os itens disponíveis e os itens adicionados aos pedidos.
 
