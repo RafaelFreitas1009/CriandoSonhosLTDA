@@ -62,7 +62,7 @@ O sistema agora conta com um banco de dados local SQLite (`pizzamais.db`) que ar
 
 O banco é gerado automaticamente ao rodar o script `banco.py`.
 
-## ⚙️ Scripts Auxiliares
+## Scripts Auxiliares
 
 Além do arquivo principal `app.py`, o projeto conta com os seguintes scripts de suporte:
 
@@ -76,8 +76,7 @@ python banco.py
 
 Para testar se as tabelas foram craidas corretamente:
 
-```python test.py
-```
+python test.py
 
 ## Tarefa
 
