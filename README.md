@@ -73,7 +73,7 @@ Além do arquivo principal `app.py`, o projeto conta com os seguintes scripts de
 Para criar o banco:
 ```bash
 python banco.py
-
+```
 Para testar se as tabelas foram craidas corretamente:
 
 python test.py
