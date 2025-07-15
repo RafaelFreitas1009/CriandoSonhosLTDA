@@ -51,6 +51,34 @@ Pressione enter e irá aparecer o terminal dentro da IDE rodando o software
 
 **Front-end** Python (terminal)
 
+## 🗃 Banco de Dados
+
+O sistema agora conta com um banco de dados local SQLite (`pizzamais.db`) que armazena os pedidos realizados, os itens disponíveis e os itens adicionados aos pedidos.
+
+### Tabelas criadas:
+- **Pedidos**
+- **Itens**
+- **ItensPedidos**
+
+O banco é gerado automaticamente ao rodar o script `banco.py`.
+
+## ⚙️ Scripts Auxiliares
+
+Além do arquivo principal `app.py`, o projeto conta com os seguintes scripts de suporte:
+
+- `banco.py`: Cria as tabelas do banco de dados (`Pedidos`, `Itens`, `ItensPedidos`).
+- `test.py`: Verifica se as tabelas foram corretamente criadas no arquivo `pizzamais.db` através de consultas ao SQLite.
+
+### Executando os scripts:
+Para criar o banco:
+```bash
+python banco.py
+
+Para testar se as tabelas foram craidas corretamente:
+
+```python test.py
+```
+
 ## Tarefa
 
 Este projeto é parte do processo avaliativo da CriandoSonhosLTDA com prazo de entrega até 15/07/2025.
