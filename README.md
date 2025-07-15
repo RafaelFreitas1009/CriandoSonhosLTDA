@@ -76,7 +76,9 @@ python banco.py
 ```
 Para testar se as tabelas foram craidas corretamente:
 
+```bash
 python test.py
+```
 
 ## Tarefa
 
