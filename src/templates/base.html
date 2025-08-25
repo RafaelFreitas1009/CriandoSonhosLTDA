@@ -1,0 +1,58 @@
+<!-- templates/base.html -->
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Pizza Mais{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <nav class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{{ url_for('home_bp.index') }}" class="font-bold text-lg">🍕 Pizza Mais</a>
+      <div class="flex items-center gap-4">
+        <a class="hover:underline" href="{{ url_for('pedido.listar_pedidos') }}">Pedidos</a>
+
+        {# ✅ agora usa a função helper has_endpoint #}
+        {% if has_endpoint('item.listar_itens') %}
+          <a class="hover:underline" href="{{ url_for('item.listar_itens') }}">Cardápio</a>
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+          <span class="text-sm">Olá, {{ current_user.username }}</span>
+          <a class="text-red-600 hover:underline" href="{{ url_for('auth.logout') }}">Sair</a>
+        {% else %}
+          <a class="hover:underline" href="{{ url_for('auth.login') }}">Entrar</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 mt-4">
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% if msgs %}
+        <div class="space-y-2">
+          {% for cat, m in msgs %}
+            <div class="rounded-lg px-4 py-3 text-sm
+                        {% if cat=='error' %}bg-red-100 text-red-800
+                        {% elif cat=='success' %}bg-green-100 text-green-800
+                        {% else %}bg-slate-100{% endif %}">
+              {{ m }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t py-6 text-center text-sm text-slate-500">
+    © {{ 2025 }} Pizza Mais · Feito com Flask
+  </footer>
+</body>
+</html>

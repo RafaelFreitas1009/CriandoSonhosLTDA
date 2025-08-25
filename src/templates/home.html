@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Início · Pizza Mais{% endblock %}
+{% block content %}
+<div class="grid md:grid-cols-2 gap-6">
+  <section class="bg-white rounded-2xl p-6 shadow">
+    <h2 class="text-xl font-semibold mb-2">Fazer Pedido</h2>
+    <p class="mb-4 text-slate-600">Monte seu pedido escolhendo itens do cardápio.</p>
+    <a href="{{ url_for('pedido.criar') }}" class="inline-block rounded-xl px-4 py-2 bg-slate-900 text-white">Novo pedido</a>
+  </section>
+
+  <section class="bg-white rounded-2xl p-6 shadow">
+    <h2 class="text-xl font-semibold mb-2">Gerenciar Cardápio</h2>
+    <p class="mb-4 text-slate-600">Cadastre e edite pizzas, bebidas e adicionais.</p>
+
+    {# só mostra se o endpoint existir #}
+    {% if has_endpoint('item.listar_itens') %}
+      <a href="{{ url_for('item.listar_itens') }}" class="inline-block rounded-xl px-4 py-2 bg-slate-900 text-white">Ver cardápio</a>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

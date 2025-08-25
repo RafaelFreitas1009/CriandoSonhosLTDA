@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Novo Pedido{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Novo Pedido</h1>
+
+<form method="post" class="bg-white rounded-2xl p-6 shadow max-w-xl">
+  <label class="block mb-3">
+    <span class="text-sm">Status</span>
+    <input name="status" required class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="ex: aberto">
+  </label>
+
+  <label class="block mb-3">
+    <span class="text-sm">Delivery?</span>
+    <select name="delivery" class="mt-1 w-full rounded-xl border px-3 py-2">
+      <option value="true">Sim</option>
+      <option value="false">Não</option>
+    </select>
+  </label>
+
+  <label class="block mb-3">
+    <span class="text-sm">Endereço</span>
+    <input name="endereco" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="Rua, nº, bairro...">
+  </label>
+
+  <label class="block mb-4">
+    <span class="text-sm">Data</span>
+    <input type="datetime-local" name="date" class="mt-1 w-full rounded-xl border px-3 py-2">
+  </label>
+
+  <label class="block mb-6">
+    <span class="text-sm">Valor Total (R$)</span>
+    <input type="number" step="0.01" name="valor_total" value="0" class="mt-1 w-full rounded-xl border px-3 py-2">
+  </label>
+
+  <div class="flex gap-2">
+    <button class="rounded-xl px-4 py-2 bg-slate-900 text-white" type="submit">Salvar</button>
+    <a class="rounded-xl px-4 py-2 border" href="{{ url_for('pedido.listar_pedidos') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

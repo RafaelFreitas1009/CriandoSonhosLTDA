@@ -1,80 +1,69 @@
-import sys
-import time
-from pathlib import Path
-file = Path(__file__).resolve()
-parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
-import aiosqlite
-import asyncio
+from flask import Flask, redirect, url_for
+from flask_login import LoginManager
+from routes.auth_routes import auth
+from routes.pedido_routes import pedido_bp
+from routes.home_routes import home_bp
 
-#models
-from model.pedido import Pedido
-from model.item import Item
+# opcional: quando você criar as rotas de itens, isso passa a registrar automaticamente
+try:
+    from routes.item_routes import item_bp
+except Exception:
+    item_bp = None
+
+from model.user import User
 from model.database import Database
-
-#controllers
-from controler.pedidoControler import PedidoControler
-from controler.itemControler import ItemControler
 from controler.databaseControler import DatabaseControler
-from controler.relatorioController import RelatorioControler
 
-#views
-from view.janela1 import Janela1
-from view.janela2 import Janela2
-from view.janela3 import Janela3
+# cria app Flask
+app = Flask(__name__)
+app.secret_key = 'pizza-secreta'
 
-#report
-from report.relatorio1 import PDF
+# login manager
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
 
-database = Database('TESTE.db') #criação do banco
-cursor = DatabaseControler.conect_database(database.name)
+# usuários fixos (teste)
+users = {'admin': User(1, 'admin', '1234')}
 
-DatabaseControler.create_table_itens(cursor)
-DatabaseControler.create_table_pedidos(cursor)
-DatabaseControler.create_table_itens_pedidos(cursor)
+@login_manager.user_loader
+def load_user(user_id):
+    for user in users.values():
+        if str(user.id) == str(user_id):
+            return user
+    return None
 
+# registra rotas (blueprints)
+app.register_blueprint(home_bp)
+app.register_blueprint(pedido_bp)
+app.register_blueprint(auth)
+if item_bp:
+    app.register_blueprint(item_bp)
 
-#item1 = Item('calabresa', 35.5, 'pizza', 'fatias de calabresa, molho de tomate, queijo')
-#item2 = Item('mussarela', 30,'pizza','muito queijo')
-#item3 = Item('frango', 35,'pizza','frango desfiado, queijo, molho de tomate')
-#lista_itens_menu = [item1, item2, item3]
+# helper para os templates
+@app.context_processor
+def inject_has_endpoint():
+    def has_endpoint(endpoint_name: str) -> bool:
+        try:
+            url_for(endpoint_name)
+            return True
+        except Exception:
+            return False
+    return dict(has_endpoint=has_endpoint)
 
-#ItemControler.insert_into_item(database.name, item1)
-#ItemControler.insert_into_item(database.name, item2)
-#ItemControler.insert_into_item(database.name, item3)
+# rota inicial
+@app.route('/')
+def index():
+    return redirect(url_for('home_bp.index'))
 
+# inicializa banco
+def inicializar_banco():
+    database = Database('pizzamais.db')
+    cursor = DatabaseControler.conect_database(database.name)
+    DatabaseControler.create_table_itens(cursor)
+    DatabaseControler.create_table_pedidos(cursor)
+    DatabaseControler.create_table_itens_pedidos(cursor)
 
-a = 'y'
-print('''
-                Bem-vindo ao software Pizza Mais
-                        -Criando Sonhos-
-                Estabelecimento: Pizza Ciclano
-                "Seus sonhos tem formato e borda"
-                ---------------------------------
-            ''')
-while a == 'y':
-    opcao = str(input('\n1 - Cadastrar\n2 - Pesquisar\n3 - Relatorio\n4 - Inserir Itens Menu\n5 - Encerrar\nDigite: '))
-    if opcao == '1':
-        asyncio.run(Janela1.mostrar_janela1(database.name))
-    elif opcao == '2':
-        Janela2.mostrar_janela2(database.name)
-    elif opcao == '3':
-        timestamp_atual = str(time.time())
-        dados_relatorio = RelatorioControler.preparar_dados_relatorio(database.name)
-        relatorio = PDF.gerar_pdf(f'Relatorio{timestamp_atual}.pdf', dados_relatorio["pedidos"],dados_relatorio["faturamento_total"])
-        
-        if relatorio:
-            print("Relatório gerado com sucesso em 'Relatorio.pdf'.")
-        else:
-            print("Erro ao gerar o relatório.")
-    elif opcao == '4':
-        from view.janela3 import Janela3
-        Janela3.mostrar_janela3(database.name)
-    elif opcao == '5':
-        a = 'n'
-        break
-    else:
-        print("Opção inválida, tente novamente.")
-exit()
-
-#manutenções em: itemControler.py, janela1.py, pedidoControler.py
+if __name__ == '__main__':
+    inicializar_banco()
+    app.run(debug=True)

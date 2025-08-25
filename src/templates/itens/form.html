@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">{{ titulo }}</h1>
+<form method="post" class="bg-white rounded-2xl p-6 shadow max-w-xl">
+  <label class="block mb-3">
+    <span class="text-sm">Nome</span>
+    <input name="nome" value="{{ item.nome if item else '' }}" required class="mt-1 w-full rounded-xl border px-3 py-2">
+  </label>
+  <label class="block mb-3">
+    <span class="text-sm">Preço</span>
+    <input name="preco" type="number" step="0.01" value="{{ item.preco if item else '' }}" required class="mt-1 w-full rounded-xl border px-3 py-2">
+  </label>
+  <label class="block mb-3">
+    <span class="text-sm">Tipo</span>
+    <input name="tipo" value="{{ item.tipo if item else '' }}" class="mt-1 w-full rounded-xl border px-3 py-2" placeholder="pizza, bebida, adicional...">
+  </label>
+  <label class="block mb-4">
+    <span class="text-sm">Descrição</span>
+    <textarea name="descricao" rows="3" class="mt-1 w-full rounded-xl border px-3 py-2">{{ item.descricao if item else '' }}</textarea>
+  </label>
+  <div class="flex gap-2">
+    <button class="rounded-xl px-4 py-2 bg-slate-900 text-white" type="submit">Salvar</button>
+    <a class="rounded-xl px-4 py-2 border" href="{{ url_for('item.listar_itens') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

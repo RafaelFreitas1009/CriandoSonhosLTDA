@@ -53,86 +53,60 @@ class Database:
             return 'D1'
 
     #criando a tabela dos produtos, caso não exista
+    # model/database.py  (somente trechos das 3 funções)
+
     @staticmethod
     def create_table_itens(cursor: object) -> bool:
-        """
-        Caso não exista, cria uma tabela de chamados em um banco de dados sqlite3
-        try -> query para criar a tabela Chamados, caso não exista no banco em questão
-        except -> informa o erro em caso de erro na operação anterior
-
-        :param cursor: object
-        :return bool || código erro = D2
-        """
         try:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Itens (
-                IdItens INTEGER PRIMARY KEY AUTOINCREMENT,
-                Nome VARHCAR(30),
-                Preco REAL,
-                Tipo VARCHAR(30),
-                Descricao VARCHAR(255),
-                CONSTRAINT Produto_Unique UNIQUE (Nome)
+                    IdItens INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nome VARCHAR(30) UNIQUE,
+                    Preco REAL,
+                    Tipo VARCHAR(30),
+                    Descricao VARCHAR(255)
                 );
             ''')
             return True
         except OSError as e:
             print(e)
-            print('Erro ao criar a tabela')
             return 'D2'
-    
-    #criando a tabela dos pedidos, caso não exista
+
     @staticmethod
     def create_table_pedidos(cursor: object) -> bool:
-        """
-        Caso não exista, cria uma tabela de pedidos em um banco de dados sqlite3
-        try -> query para criar a tabela Chamados, caso não exista no banco em questão
-        except -> informa o erro em caso de erro na operação anterior
-
-        :param cursor: obj
-        :return bool || código erro = D3
-        """
         try:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Pedidos (
-                IdPedido INTEGER PRIMARY KEY AUTOINCREMENT,
-                Status VARCHAR(30) NOT NULL,
-                Delivery BOLL,
-				Endereco VARCHAR(100),
-                ValorTotal REAL NOT NULL
+                    IdPedido   INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Status     VARCHAR(30) NOT NULL,
+                    Delivery   INTEGER NOT NULL DEFAULT 0,  -- 0/1 no SQLite
+                    Endereco   VARCHAR(100),
+                    Data       TEXT,                         -- string do input datetime-local
+                    ValorTotal REAL NOT NULL DEFAULT 0
                 );
             ''')
             return True
         except OSError as e:
             print(e)
-            print('Erro ao criar a tabela')
             return 'D3'
-    
-    #criando a tabela dos itens_pedidos, caso não exista
+
     @staticmethod
     def create_table_itens_pedidos(cursor: object) -> bool:
-        """
-        Caso não exista, cria uma tabela de pedidos em um banco de dados sqlite3
-        try -> query para criar a tabela Chamados, caso não exista no banco em questão
-        except -> informa o erro em caso de erro na operação anterior
-
-        :param cursor: obj
-        :return bool || código erro = D4
-        """
         try:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS ItensPedidos (
-                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                IdPedido INTEGER NOT NULL,
-                IdItem INTEGER NOT NULL,
-                FOREIGN KEY(IdPedido) REFERENCES Pedidos(IdPedido),
-                FOREIGN KEY(IdItem) REFERENCES Produtos(IdItem)
+                    Id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                    IdPedido INTEGER NOT NULL,
+                    IdItem   INTEGER NOT NULL,
+                    FOREIGN KEY(IdPedido) REFERENCES Pedidos(IdPedido) ON DELETE CASCADE,
+                    FOREIGN KEY(IdItem)   REFERENCES Itens(IdItens)   ON DELETE CASCADE
                 );
             ''')
             return True
         except OSError as e:
             print(e)
-            print('Erro ao criar a tabela')
             return 'D4'
+
 
 
 '''

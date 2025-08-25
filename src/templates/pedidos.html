@@ -1,0 +1,23 @@
+<!-- templates/pedidos.html -->
+<h2>Lista de pedidos</h2>
+<!-- Aqui você pode iterar a lista de pedidos no futuro -->
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Exemplo de como os pedidos podem ser exibidos -->
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ pedido.id }}</td>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.data }}</td>
+            <td>{{ pedido.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
